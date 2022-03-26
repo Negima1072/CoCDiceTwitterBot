@@ -8,6 +8,10 @@ import time
 import psycopg2
 from xml.sax.saxutils import unescape
 
+from dotenv import load_dotenv
+load_dotenv(override=True)
+
+
 API_KEY = os.getenv('API_KEY')
 API_SECRET = os.getenv('API_SECRET')
 ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')

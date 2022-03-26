@@ -94,6 +94,7 @@ def updateDB():
     conn.close()
 
 def job():
+    print("do Job")
     doReplyMention()
     doReplyDM()
     updateDB()

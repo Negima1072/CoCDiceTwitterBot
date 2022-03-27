@@ -65,7 +65,7 @@ def doReplyMention():
                 continue
             print(mention.id)
             reply_text = "@"+str(mention.user.screen_name) + " " + res_text
-            if len(replay_text) > 140:
+            if len(reply_text) > 140:
                 replay_text2 = reply_text[0:139] + "…"
             else:
                 replay_text2 = reply_text

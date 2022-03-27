@@ -68,8 +68,8 @@ def doReplyMention():
             if len(replay_text) > 140:
                 replay_text = replay_text[0:139] + "…"
             api.update_status(status = reply_text, in_reply_to_status_id = mention.id)
-        except:
-            pass
+        except as ex:
+            print(ex)
 
 #DM
 def doReplyDM():
@@ -87,8 +87,8 @@ def doReplyDM():
                 continue
             lastdm_id = mes.id
             api.send_direct_message(mes.message_create["sender_id"], res_text)
-        except:
-            pass
+        except as ex:
+            print(ex)
 
 #Update
 def updateDB():

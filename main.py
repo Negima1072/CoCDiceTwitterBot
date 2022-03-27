@@ -50,51 +50,62 @@ def doReplyMention():
     global lasttweet_id
     status = api.mentions_timeline(since_id=lasttweet_id)
     for mention in status:
-        text = unescape(mention.text)
-        if " " not in text:
-            continue
-        txt = ""
-        for i in text.split(" "):
-            if i[0] != "@":
-                txt+=i
-                txt+=" "
-        res_text = getDiceroll(txt)
-        if res_text == "":
-            continue
-        print(mention.id)
-        lasttweet_id = mention.id
-        reply_text = "@"+str(mention.user.screen_name) + " " + res_text
-        api.update_status(status = reply_text, in_reply_to_status_id = mention.id)
+        try:
+            text = unescape(mention.text)
+            if " " not in text:
+                continue
+            txt = ""
+            for i in text.split(" "):
+                if i[0] != "@":
+                    txt+=i
+                    txt+=" "
+            res_text = getDiceroll(txt)
+            if res_text == "":
+                continue
+            print(mention.id)
+            lasttweet_id = mention.id
+            reply_text = "@"+str(mention.user.screen_name) + " " + res_text
+            if len(replay_text) > 140:
+                replay_text = replay_text[0:139] + "…"
+            api.update_status(status = reply_text, in_reply_to_status_id = mention.id)
+        except:
+            pass
 
 #DM
 def doReplyDM():
     global lastdm_id
     meses = api.get_direct_messages()
     for mes in meses:
-        if int(mes.id) <= int(lastdm_id):
-            continue
-        if mes.message_create["sender_id"] == "1461318388433956865":
-            continue
-        text = unescape(mes.message_create["message_data"]["text"])
-        res_text = getDiceroll(text)
-        if res_text == "":
-            continue
-        lastdm_id = mes.id
-        api.send_direct_message(mes.message_create["sender_id"], res_text)
+        try:
+            if int(mes.id) <= int(lastdm_id):
+                continue
+            if mes.message_create["sender_id"] == "1461318388433956865":
+                continue
+            text = unescape(mes.message_create["message_data"]["text"])
+            res_text = getDiceroll(text)
+            if res_text == "":
+                continue
+            lastdm_id = mes.id
+            api.send_direct_message(mes.message_create["sender_id"], res_text)
+        except:
+            pass
 
 #Update
 def updateDB():
-    global lasttweet_id
-    global lastdm_id
-    conn = get_connection() 
-    cur = conn.cursor()
-    cur.execute('UPDATE data SET last_tweetid = %s, last_dmid = %s WHERE id = 1', (lasttweet_id, lastdm_id)) 
-    conn.commit()
-    cur.close()
-    conn.close()
+    try:
+        global lasttweet_id
+        global lastdm_id
+        conn = get_connection() 
+        cur = conn.cursor()
+        cur.execute('UPDATE data SET last_tweetid = %s, last_dmid = %s WHERE id = 1', (lasttweet_id, lastdm_id)) 
+        conn.commit()
+        cur.close()
+        conn.close()
+    except:
+        print("DB Error...")
 
 def job():
-    print("do Job")
+    print("do Job" + datetime.datetime.now().strftime('%Y年%m月%d日 %H:%M:%S'))
     doReplyMention()
     doReplyDM()
     updateDB()

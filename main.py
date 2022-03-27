@@ -51,6 +51,7 @@ def doReplyMention():
     status = api.mentions_timeline(since_id=lasttweet_id)
     for mention in status:
         try:
+            lasttweet_id = mention.id
             text = unescape(mention.text)
             if " " not in text:
                 continue
@@ -63,11 +64,12 @@ def doReplyMention():
             if res_text == "":
                 continue
             print(mention.id)
-            lasttweet_id = mention.id
             reply_text = "@"+str(mention.user.screen_name) + " " + res_text
             if len(replay_text) > 140:
-                replay_text = replay_text[0:139] + "…"
-            api.update_status(status = reply_text, in_reply_to_status_id = mention.id)
+                replay_text2 = replay_text[0:139] + "…"
+            else:
+                replay_text2 = reply_text
+            api.update_status(status = replay_text2, in_reply_to_status_id = mention.id)
         except Exception as ex:
             print(ex)
 
@@ -79,13 +81,14 @@ def doReplyDM():
         try:
             if int(mes.id) <= int(lastdm_id):
                 continue
+            lastdm_id = mes.id
             if mes.message_create["sender_id"] == "1461318388433956865":
                 continue
             text = unescape(mes.message_create["message_data"]["text"])
             res_text = getDiceroll(text)
             if res_text == "":
                 continue
-            lastdm_id = mes.id
+            print(lastdm_id)
             api.send_direct_message(mes.message_create["sender_id"], res_text)
         except Exception as ex:
             print(ex)

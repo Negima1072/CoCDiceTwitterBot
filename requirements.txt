@@ -1,4 +1,5 @@
 tweepy
 requests
 schedule
-psycopg2
+psycopg2-binary
+python-dotenv

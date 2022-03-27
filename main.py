@@ -66,7 +66,7 @@ def doReplyMention():
             print(mention.id)
             reply_text = "@"+str(mention.user.screen_name) + " " + res_text
             if len(replay_text) > 140:
-                replay_text2 = replay_text[0:139] + "…"
+                replay_text2 = reply_text[0:139] + "…"
             else:
                 replay_text2 = reply_text
             api.update_status(status = replay_text2, in_reply_to_status_id = mention.id)

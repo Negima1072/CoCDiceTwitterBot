@@ -106,11 +106,14 @@ def updateDB():
 
 def job():
     print("do Job" + datetime.datetime.now().strftime('%Y年%m月%d日 %H:%M:%S'))
-    doReplyMention()
-    doReplyDM()
-    updateDB()
+    try:
+        doReplyMention()
+        doReplyDM()
+        updateDB()
+    except as ex:
+        print(ex)
 
-schedule.every(45).seconds.do(job)
+schedule.every(60).seconds.do(job)
 
 while True:
     schedule.run_pending()

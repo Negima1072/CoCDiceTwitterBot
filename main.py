@@ -15,6 +15,29 @@ consumer_key = os.environ.get("CONSUMER_KEY")
 access_token = os.environ.get("ACCESS_TOKEN")
 access_token_secret = os.environ.get("ACCESS_SECRET")
 
+quickreply = [
+    {
+    "label": "1d100",
+    "description": "Random from 1 to 100",
+    "metadata": "external_id_1"
+    },
+    {
+    "label": "cc<=50",
+    "description": "50% success",
+    "metadata": "external_id_2"
+    },
+    {
+    "label": "D66",
+    "description": "Total of 2 6-sided dice",
+    "metadata": "external_id_3"
+    },
+    {
+    "label": "MA",
+    "description": "Sample Manias",
+    "metadata": "external_id_4"
+    }
+]
+
 auth=tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api=tweepy.API(auth)
@@ -74,7 +97,7 @@ def webhook():
                 text = unescape(data["direct_message_events"][0]["message_create"]["message_data"]["text"])
                 res_text = getDiceroll(text)
                 if res_text != "":
-                    api.send_direct_message(recipient_id=sender_id, text=res_text)
+                    api.send_direct_message(recipient_id=sender_id, text=res_text, quick_reply_options=quickreply)
         except Exception as e:
             print("Error(DM): "+str(e))
     return 'OK'

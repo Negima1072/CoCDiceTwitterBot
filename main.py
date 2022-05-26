@@ -25,6 +25,10 @@ def getDiceroll(command):
         return res["text"]
     return ""
 
+@app.route('/version', methods=['GET'])
+def version():
+    return "v0.0.16"
+
 @app.route('/webhook', methods=['GET'])
 def webhook_challenge():
     params = request.args
@@ -40,6 +44,7 @@ def webhook_challenge():
 def webhook():
     data = request.get_data(as_text=True)
     data = json.loads(data)
+    print(str(data))
     if "tweet_create_events" in data:
         try:
             sender_id = data["tweet_create_events"][0]["user"]["id_str"]

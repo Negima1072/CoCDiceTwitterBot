@@ -28,7 +28,7 @@ quickreply = [
     },
     {
     "label": "D66",
-    "description": "Total of 2 6-sided dice",
+    "description": "6-sided dice for 2 digits",
     "metadata": "external_id_3"
     },
     {
@@ -50,7 +50,7 @@ def getDiceroll(command):
 
 @app.route('/version', methods=['GET'])
 def version():
-    return "v0.0.16"
+    return "v0.1.1"
 
 @app.route('/webhook', methods=['GET'])
 def webhook_challenge():

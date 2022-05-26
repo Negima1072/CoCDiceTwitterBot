@@ -46,12 +46,17 @@ def webhook():
     data = json.loads(data)
     print(str(data))
     if "tweet_create_events" in data:
+        flg=0
         try:
             sender_id = data["tweet_create_events"][0]["user"]["id_str"]
+            flg+=1
             if "1461318388433956865" in [i["id_str"] for i in data["tweet_create_events"][0]["entities"]["user_mentions"]]:
+                flg+=1
                 if not sender_id == "1461318388433956865":
+                    flg+=1
                     text = unescape(data["tweet_create_events"][0]["text"])
                     if " " in text:
+                        flg+=1
                         txt = ""
                         for i in text.split(" "):
                             if i[0] != "@":
@@ -59,12 +64,14 @@ def webhook():
                                 txt+=" "
                         res_text = getDiceroll(text)
                         if res_text != "":
+                            flg+=1
                             res_text = "@"+str(data["tweet_create_events"][0]["user"]["screen_name"]) + " " + res_text
                             if len(res_text) > 140:
                                 res_text = res_text[0:139] + "…"
                             api.update_status(status = res_text, in_reply_to_status_id = data["tweet_create_events"][0]["id"])
         except Exception as e:
             print("Error(Rp): "+str(e))
+        print(flg)
     if "direct_message_events" in data:
         try:
             sender_id = data["direct_message_events"][0]["message_create"]["sender_id"]

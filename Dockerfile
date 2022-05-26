@@ -1,9 +1,0 @@
-FROM python:3.10.4
-
-RUN mkdir /bot
-ADD . /bot
-WORKDIR /bot
-
-RUN pip install -r requirements.txt
-
-CMD ["python", "-u", "main.py"]

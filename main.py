@@ -121,25 +121,26 @@ def webhook():
     print(str(data))
     if "tweet_create_events" in data:
         try:
-            sender_id = data["tweet_create_events"][0]["user"]["id_str"]
-            if "1461318388433956865" in [i["id_str"] for i in data["tweet_create_events"][0]["entities"]["user_mentions"]]:
-                if not sender_id == "1461318388433956865":
-                    text = unescape(data["tweet_create_events"][0]["text"])
-                    if " " in text:
-                        txt = ""
-                        for i in text.split(" "):
-                            if i[0] != "@":
-                                txt+=i
-                                txt+=" "
-                        res_text = getDiceroll(txt)
-                        if res_text != "":
-                            res_text = "@"+str(data["tweet_create_events"][0]["user"]["screen_name"]) + " " + res_text
-                            if len(res_text) > 140:
-                                res_text = res_text[0:139] + "…"
-                                api.send_direct_message(recipient_id=sender_id, text="リプライの続き："+getDiceroll(txt), quick_reply_options=quickreply)
-                            api.update_status(status = res_text, in_reply_to_status_id = data["tweet_create_events"][0]["id"])
-                        else:
-                            api.update_status(status = "@"+str(data["tweet_create_events"][0]["user"]["screen_name"]) + " " + "エラー：コマンドが正しくありません。", in_reply_to_status_id = data["tweet_create_events"][0]["id"])
+            if "retweeted_status" not in data["tweet_create_events"][0]:
+                sender_id = data["tweet_create_events"][0]["user"]["id_str"]
+                if "1461318388433956865" in [i["id_str"] for i in data["tweet_create_events"][0]["entities"]["user_mentions"]]:
+                    if not sender_id == "1461318388433956865":
+                        text = unescape(data["tweet_create_events"][0]["text"])
+                        if " " in text:
+                            txt = ""
+                            for i in text.split(" "):
+                                if i[0] != "@":
+                                    txt+=i
+                                    txt+=" "
+                            res_text = getDiceroll(txt)
+                            if res_text != "":
+                                res_text = "@"+str(data["tweet_create_events"][0]["user"]["screen_name"]) + " " + res_text
+                                if len(res_text) > 140:
+                                    res_text = res_text[0:139] + "…"
+                                    api.send_direct_message(recipient_id=sender_id, text="リプライの続き："+getDiceroll(txt), quick_reply_options=quickreply)
+                                api.update_status(status = res_text, in_reply_to_status_id = data["tweet_create_events"][0]["id"])
+                            else:
+                                api.update_status(status = "@"+str(data["tweet_create_events"][0]["user"]["screen_name"]) + " " + "エラー：コマンドが正しくありません。", in_reply_to_status_id = data["tweet_create_events"][0]["id"])
         except Exception as e:
             print("Error(Rp): "+str(e))
     if "direct_message_events" in data:

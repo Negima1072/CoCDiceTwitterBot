@@ -101,7 +101,7 @@ def getDiceroll(command):
 
 @app.route('/version', methods=['GET'])
 def version():
-    return "v0.1.3"
+    return "v0.1.4"
 
 @app.route('/webhook', methods=['GET'])
 def webhook_challenge():
